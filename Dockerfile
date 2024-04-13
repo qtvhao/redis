@@ -7,3 +7,4 @@ RUN install_packages samba-client cifs-utils
 #     samba-common-tools \
 #     samba-client \
 #     && rm -rf /var/cache/apk/*
+COPY redis-backup-service.sh .
