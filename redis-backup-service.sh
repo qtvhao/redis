@@ -12,13 +12,20 @@ _term() {
 trap _term SIGTERM
 
 echo "Doing some initial work...";
-wait_for_file_available() {
-    local file="$1"
-    while [ ! -f "$file" ]; do
-        sleep 1
-    done
-}
-timeout 8 wait_for_file_available /bitnami/redis/data/backup-service/dump.rdb || true
+
+
+for i in $(seq 1 10); do
+    if [ -f "/bitnami/redis/data/backup-service/dump.rdb" ]; then
+        echo "File $i exists"
+        break;
+    else
+        echo "File $i does not exist"
+    fi
+    sleep 1
+    echo "Waiting for file $i"
+done
+
+
 if [ -f /bitnami/redis/data/backup-service/dump.rdb ]; then
     cp /bitnami/redis/data/backup-service/dump.rdb /bitnami/redis/data/dump.rdb
 fi
